@@ -28,10 +28,30 @@ function getIssuesList(){
 		});
 }
 
+function addUser (data) {
+  return fetch(`${SERVER}/users`, {
+	  method: 'POST',
+	  headers: {
+		'Accept': 'application/json',
+		'Content-Type': 'application/json',
+	  },
+	  body: JSON.stringify(data)
+	})
+}
+
+function deleteUser (userid) {
+  return fetch(`${SERVER}/users/${userid}`, {
+    method: 'delete',
+  })
+}
+
+
 var DataService = {
 	'getProjectList':getProjectList,
 	'getIssuesList':getIssuesList,
 	'getProjectIssuesList': getProjectIssuesList,
+  'addUser':addUser,
+  'deleteUser':deleteUser
 };
 
 module.exports = DataService
