@@ -32,6 +32,12 @@ var ProjectList = React.createClass({
     this.refs['navTab'].openNavDrawer();
   },
 
+
+  _onActionSelected: function(position) {
+    this.props.nav.push({
+      id: 'CreateUser',
+    });
+  },
   render: function() {
     var content = (
       <ListView
@@ -53,7 +59,12 @@ var ProjectList = React.createClass({
       // important：NavTab外面不能包其他标签，因为其用了DrawerLayoutAndroid, DrawerLayoutAndroid外有别的标签会不显示，且没有任何提示。
       // important：ListView不能滚动。如果ListView包在一个View中，那么外面这个View需要设置style={flex: 1}。
       <NavTab ref='navTab' nav={this.props.nav}>
-        <NavToolbar icon={"ic_menu_white"} title={'项目'} onClicked={this.onToolbarClicked} />
+        <NavToolbar icon={"ic_menu_white"}
+          nav={this.props.nav}
+          title={'用户'}
+          onClicked={this.onToolbarClicked}
+          onActionSelected={this._onActionSelected}
+          actions={toolbarActions}/>
         {content}
       </NavTab>
     );
@@ -74,5 +85,9 @@ var ProjectList = React.createClass({
     });
   },
 });
+
+var toolbarActions = [
+  {title: '创建', show: 'always'},
+];
 
 module.exports = ProjectList;

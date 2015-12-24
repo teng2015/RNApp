@@ -7,6 +7,7 @@ var ProjectProfile = require('./project/projectProfile/ProjectProfile.android');
 var IssuesList = require('./issues/issuesList/IssuesList.android');
 var IssuesProfile = require('./issues/issuesProfile/IssuesProfile.android');
 var Todo = require('./common/todo/Todo.android');
+var CreateUser=require('./user/createuser.android');
 
 var _navigator;
 
@@ -38,7 +39,13 @@ var Routers = React.createClass({
         </View>
       )
     }
-
+    if (route.id === 'CreateUser') {
+      return (
+        <View style={{flex: 1}}>
+          <CreateUser nav={navigator} />
+        </View>
+      )
+    }
     if (route.id === 'IssuesList') {
       return (
         <View style={{flex: 1}}>

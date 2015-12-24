@@ -1,21 +1,24 @@
 'use strict';
 
 var React = require('react-native');
-
+var Dimensions=require('Dimensions');
 var {
   StyleSheet,
 } = React;
 
 module.exports = StyleSheet.create({
+  scroll:{
+    marginRight:10,
+    marginLeft: 10
+  },
   container: {
     flex: 1,
+    width:Dimensions.get('window').width -10,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
     padding: 0,
-    marginLeft: 10,
-    marginRight: 10,
     marginVertical: 5,
     borderColor: '#dddddd',
     borderStyle: null,

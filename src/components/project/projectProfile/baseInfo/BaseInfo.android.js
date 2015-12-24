@@ -11,10 +11,7 @@ var BaseInfo = React.createClass({
       <View style={styles.container}>
         <View style={styles.head}>
           <Text style={styles.projectSlogan}>
-            {project.slogan}
-          </Text>
-          <Text style={styles.projectDetail}>
-            Created by {project.owner.username} | {project.stars} 关注
+            {project.name}
           </Text>
         </View>
       </View>

@@ -1,21 +1,21 @@
 'use strict';
-var SERVER = 'http://www.yudianer.com/api';
+var SERVER = 'http://192.168.0.181:9000/api';
 
 function getProjectList(){
-    return fetch(`${SERVER}/project`)
+    return fetch(`${SERVER}/users`)
 		.then((response) => response.json())
 		.then((responseData) => {
-			console.info("加载项目完成：",responseData.data);
-			return responseData.data;
+			console.info("加载项目完成：",responseData);
+			return responseData;
 		});
 }
 
 function getProjectIssuesList(projectId){
-    return fetch(`${SERVER}/project/${projectId}/issues`)
+    return fetch(`${SERVER}/${projectId}`)
 		.then((response) => response.json())
 		.then((responseData) => {
-			console.info(`加载\"项目${projectId}\"议题完成：`,responseData.data);
-			return responseData.data;
+			console.info(`加载\"项目${projectId}\"议题完成：`,responseData);
+			return responseData;
 		});
 }
 

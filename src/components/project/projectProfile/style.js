@@ -14,4 +14,10 @@ module.exports = StyleSheet.create({
     justifyContent: 'center',
     height:40,
   },
+  projectImage: {
+    height: 140,
+    width: 140,
+    justifyContent: 'center',
+    borderRadius:80
+  },
 });
