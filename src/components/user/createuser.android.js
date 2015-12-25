@@ -21,28 +21,31 @@ var createuser = React.createClass({
         <NavToolbar icon={"ic_arrow_back_white_24dp"} title='创建用户' onClicked={() => {this.props.nav.pop();}} />
 
         <View style={styles.todo}>
-        <View style={{width:Dimensions.get('window').width,}}>
-        <Text>请填写用户信息</Text>
-        </View>
-        <View style={{borderColor: '#CBCACA',}}>
-        <Text style={styles.texts}>姓名</Text>
-        <TextInput style={styles.adduserInput} onChangeText={(text) => this.setState({names: text})}/>
-      </View>
-       <View>
-        <Text>年龄</Text>
-        <TextInput keyboardType={'numeric'} maxlength={2} onChangeText={(text) => this.setState({ages: text})}/>
-      </View>
-       <View>
-        <Text>城市</Text>
-        <TextInput onChangeText={(text) => this.setState({citys: text})} />
-      </View>
-      <View>
-        <TouchableOpacity onPress={this.addUser}>
-          <View style={styles.button}>
-            <Text style={styles.text}>保存</Text>
+          <View style={{borderColor: '#CBCACA',}}>
+            <Text style={styles.texts}>姓名</Text>
+            <View style={styles.adduserInput}>
+            <TextInput textAlign={'center'} textAlignVertical={'top'}  style={styles.TextInputs} onChangeText={(text) => this.setState({names: text})} />
+            </View>
           </View>
-        </TouchableOpacity>
-      </View>
+          <View>
+            <Text style={styles.texts}>年龄</Text>
+            <View style={styles.adduserInput}>
+              <TextInput textAlign={'center'} textAlignVertical={'top'} style={styles.TextInputs} underlineColorAndroid ={'transparent'} keyboardType={'numeric'} maxlength={2} onChangeText={(text) => this.setState({ages: text})} />
+            </View>
+          </View>
+          <View>
+            <Text style={styles.texts}>城市</Text>
+            <View  style={styles.adduserInput}>
+            <TextInput textAlign={'center'} textAlignVertical={'top'} style={styles.TextInputs} onChangeText={(text) => this.setState({citys: text})} />
+            </View>
+          </View>
+          <View>
+            <TouchableOpacity style={{marginTop:130}} onPress={this.addUser}>
+              <View style={styles.button}>
+                <Text style={styles.text}>保存</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
@@ -54,25 +57,28 @@ var createuser = React.createClass({
           city: this.state.citys
         };
   if(!this.state.names || !this.state.ages || !this.state.citys){
-      ToastAndroid.show("请确认信息是否填写完整！！！", ToastAndroid.LONG)
+      ToastAndroid.show("请确认信息是否填写完整！！！", ToastAndroid.SHORT)
     }
-    DataService.addUser(usersparm)
-        .then((response) => response.json())
-        .then((responseText) => {
-          if (responseText.error) {
-            ToastAndroid.show("创建失败", ToastAndroid.SHORT)
-          }
-          else
-          {
+    else {
+      DataService.addUser(usersparm)
+          .then((response) => response.json())
+          .then((responseText) => {
+            if (responseText.error) {
+              ToastAndroid.show("创建失败", ToastAndroid.SHORT)
+            }
+            else
+            {
 
-            ToastAndroid.show("创建成功", ToastAndroid.SHORT)
-            this.props.nav.push({
-              id: 'ProjectList',
-            });
+              ToastAndroid.show("创建成功", ToastAndroid.SHORT)
+              this.props.nav.push({
+                id: 'ProjectList',
+              });
 
-          }
+            }
 
-    	  })
+          })
+    }
+
 
   }
 

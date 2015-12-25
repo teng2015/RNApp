@@ -13,30 +13,39 @@ module.exports = StyleSheet.create({
   },
   todo:{
     flex: 1,
+    paddingLeft:40,
+    paddingRight:40,
+    paddingTop:20,
+    paddingBottom:10
   },
   button:{
-    width:Dimensions.get('window').width,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10,
     marginVertical: 5,
-    height:76,
+    height:56,
     backgroundColor:'green',
 
   },
   text:{
+    fontSize:22,
     color:'white'
   },
   texts:{
-    fontFamily: 'Cochin',
-    width:Dimensions.get('window').width,
-    backgroundColor:'#8ED9E6',
-    fontSize:14,
+    marginTop:5,
+    fontSize:18,
+    fontWeight:'bold',
   },
   adduserInput: {
-       borderWidth: 2,
-       borderRadius: 4,
-       borderColor:'black',
-   },
+    borderWidth: 0.5,
+    borderColor: '#FF6600',
+    borderRadius: 5,
+    marginTop:5,
+    marginBottom:0,
+    height:43
+  },
+  TextInputs:{
+    fontSize:16
+  },
 });

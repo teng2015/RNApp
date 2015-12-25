@@ -2,8 +2,8 @@
 
 var React = require('react-native');
 var Button=require('../../../button/button.android');
-var DataService = require('../../../../network/DataService');
 var ProjectList = require('../ProjectList.android');
+var NavTab = require('../../../navigation/navTab/NavTab.android');
 
 var NavToolbar = require('../../../navigation/navToolBar/NavToolBar.android');
 
@@ -25,8 +25,8 @@ var ProjectCell = React.createClass({
   render: function() {
     var project = this.props.project;
     return (
-      <ScrollView horizontal="true" style={styles.scroll}>
-      <TouchableHighlight onPress={this.props.onSelect}>
+      <ScrollView horizontal={true} style={styles.scroll} showsHorizontalScrollIndicator={false} >
+      <TouchableHighlight onPress={this.props.onSelect} style={{overflow:'hidden'}}>
         <View style={styles.container}>
           <Image
             source={{uri: project.avatar}}
@@ -42,28 +42,10 @@ var ProjectCell = React.createClass({
           </View>
         </View>
       </TouchableHighlight>
-      <Button text='编辑' style={{backgroundColor:'green'}} onclick={this.editAction}></Button>
-      <Button text='删除' style={{backgroundColor:'red'}} onclick={() =>this.deleteAction(project)}></Button>
+      <Button text='编辑' style={{backgroundColor:'green',overflow:'hidden'}} onclick={this.editAction}></Button>
+      <Button text='删除' style={{backgroundColor:'red',overflow:'hidden'}} onclick={() =>this.props.deleteAction(project)}></Button>
       </ScrollView>
     );
-  },
-  deleteAction:function(project){
-    var userid=project._id;
-    DataService.deleteUser(userid)
-    .then((response) => response.text())
-    .then((responseText) => {
-      if (responseText.error) {
-        ToastAndroid.show("删除失败", ToastAndroid.SHORT)
-      }
-      else
-      {
-          ToastAndroid.show("删除成功", ToastAndroid.SHORT)
-          this.props.nav.push({
-            id: 'ProjectList',
-          });
-      }
-
-    })
   },
 });
 

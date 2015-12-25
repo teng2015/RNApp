@@ -1,12 +1,13 @@
 'use strict';
 
 var React = require('react-native');
-var { Text, View, ListView, } = React;
+var { Text, View, ListView, ToastAndroid ,PullToRefreshViewAndroid,ScrollView} = React;
 var DataService = require('../../../network/DataService');
 var NavTab = require('../../navigation/navTab/NavTab.android');
 var NavToolbar = require('../../navigation/navToolBar/NavToolBar.android');
 var ProjectCell = require('./projectCell/ProjectCell.android');
 var styles = require("./style");
+var _=require("lodash");
 
 var ProjectList = React.createClass({
   getInitialState: function() {
@@ -18,9 +19,12 @@ var ProjectList = React.createClass({
 
   componentDidMount: function() {
     DataService.getProjectList()
-      .then( responseData => {
+      .then(responseData=>{
+        if(!!responseData){
+          currentData = responseData;
+        }
         this.setState({
-          dataSource: this.state.dataSource.cloneWithRows(responseData),
+          dataSource: this.state.dataSource.cloneWithRows(currentData),
           loaded: true
         });
       })
@@ -31,8 +35,20 @@ var ProjectList = React.createClass({
     // important：需要调用子控件中导出的方法，可以通过ref，去调用。
     this.refs['navTab'].openNavDrawer();
   },
-
-
+  _refreshData:function(){
+    DataService.getProjectList()
+      .then(responseData=>{
+        ToastAndroid.show('yeah!',ToastAndroid.SHORT)
+        if(!!responseData){
+          currentData = responseData;
+        }
+        this.setState({
+          dataSource: this.state.dataSource.cloneWithRows(currentData),
+          loaded: true
+        });
+      })
+      .done();
+  },
   _onActionSelected: function(position) {
     this.props.nav.push({
       id: 'CreateUser',
@@ -40,10 +56,13 @@ var ProjectList = React.createClass({
   },
   render: function() {
     var content = (
-      <ListView
-        dataSource={this.state.dataSource}
-        renderRow={this.renderProject}
-        style={styles.projectListView} />
+      // <PullToRefreshViewAndroid onRefresh={this._refreshData} style={{flex:1}}>
+        <ListView
+          dataSource={this.state.dataSource}
+          renderRow={this.renderProject}
+          pageSize={10}
+          style={styles.projectListView} />
+      // </PullToRefreshViewAndroid>
     );
 
     if(!this.state.loaded){
@@ -74,7 +93,8 @@ var ProjectList = React.createClass({
     return(
       <ProjectCell
         onSelect={() => this.selectProject(project)}
-        project={project}/>
+        project={project}
+        deleteAction={()=>this.deleteAction(project)}/>
     );
   },
 
@@ -84,7 +104,35 @@ var ProjectList = React.createClass({
       project: project,
     });
   },
+  deleteAction:function(project){
+    var userid=project._id;
+    DataService.deleteUser(userid)
+    // .then((response) => response.text())
+    .then((responseText) => {
+      if (responseText.error) {
+        ToastAndroid.show("删除失败", ToastAndroid.SHORT)
+      }
+      else {
+        ToastAndroid.show("删除成功", ToastAndroid.SHORT)
+        if(currentData&&currentData.length>0&&!!project){
+          let tempIds=_.pluck(currentData,'_id'),
+            _index=tempIds.indexOf(project['_id'])
+          ;
+          if(_index>-1){
+            currentData.splice(_index,1);
+            var temp=new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2});
+            this.setState({
+              dataSource: temp.cloneWithRows(currentData),
+              loaded: true
+            });
+          }
+        }
+      }
+    })
+  },
 });
+
+var currentData=[];
 
 var toolbarActions = [
   {title: '创建', show: 'always'},

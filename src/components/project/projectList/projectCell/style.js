@@ -13,7 +13,7 @@ module.exports = StyleSheet.create({
   },
   container: {
     flex: 1,
-    width:Dimensions.get('window').width -10,
+    width:Dimensions.get('window').width -20,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',

@@ -22,9 +22,9 @@ var style={
    flexDirection: 'row',
    justifyContent: 'center',
    alignItems: 'center',
-   padding: 10,
+   padding: 8,
    marginVertical: 5,
-   height:76,
+   height:62,
    backgroundColor:'black'
  },
  text:{
