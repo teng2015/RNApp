@@ -21,8 +21,6 @@ BackAndroid.addEventListener('hardwareBackPress', () => {
 
 var Routers = React.createClass({
   renderScene: function(route, navigator) {
-
-    console.info("当前路由：", navigator.getCurrentRoutes());
     _navigator = navigator;
     if (route.id === 'ProjectList') {
       return (

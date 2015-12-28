@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react-native');
-var { Text, View, ListView, ToastAndroid ,PullToRefreshViewAndroid,ScrollView} = React;
+var { Text, View, ListView, ToastAndroid ,PullToRefreshViewAndroid,ScrollView,Alert} = React;
 var DataService = require('../../../network/DataService');
 var NavTab = require('../../navigation/navTab/NavTab.android');
 var NavToolbar = require('../../navigation/navToolBar/NavToolBar.android');
@@ -106,29 +106,30 @@ var ProjectList = React.createClass({
   },
   deleteAction:function(project){
     var userid=project._id;
-    DataService.deleteUser(userid)
-    // .then((response) => response.text())
-    .then((responseText) => {
-      if (responseText.error) {
-        ToastAndroid.show("删除失败", ToastAndroid.SHORT)
-      }
-      else {
-        ToastAndroid.show("删除成功", ToastAndroid.SHORT)
-        if(currentData&&currentData.length>0&&!!project){
-          let tempIds=_.pluck(currentData,'_id'),
-            _index=tempIds.indexOf(project['_id'])
-          ;
-          if(_index>-1){
-            currentData.splice(_index,1);
-            var temp=new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2});
-            this.setState({
-              dataSource: temp.cloneWithRows(currentData),
-              loaded: true
-            });
+    Alert.alert('删除用户','是否删除该用户？',[{text: '取消', onPress: () => console.log('Cancel Pressed!')},{text: '确认', onPress: () => {
+      DataService.deleteUser(userid)
+      .then((responseText) => {
+        if (responseText.error) {
+          ToastAndroid.show("删除失败", ToastAndroid.SHORT)
+        }
+        else {
+          ToastAndroid.show("删除成功", ToastAndroid.SHORT)
+          if(currentData&&currentData.length>0&&!!project){
+            let tempIds=_.pluck(currentData,'_id'),
+              _index=tempIds.indexOf(project['_id'])
+            ;
+            if(_index>-1){
+              currentData.splice(_index,1);
+              var temp=new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2});
+              this.setState({
+                dataSource: temp.cloneWithRows(currentData),
+                loaded: true
+              });
+            }
           }
         }
-      }
-    })
+      })
+    }}]);
   },
 });
 
