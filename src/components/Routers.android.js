@@ -8,6 +8,7 @@ var IssuesList = require('./issues/issuesList/IssuesList.android');
 var IssuesProfile = require('./issues/issuesProfile/IssuesProfile.android');
 var Todo = require('./common/todo/Todo.android');
 var CreateUser=require('./user/createuser.android');
+var UpdateUser=require('./user/updateuser.android');
 
 var _navigator;
 
@@ -86,6 +87,14 @@ var Routers = React.createClass({
           <Todo nav={navigator}>
             <Text> 没有什么需要设置的。。。issues </Text>
           </Todo>
+        </View>
+      )
+    }
+
+    if (route.id === 'UpdateUser') {
+      return (
+        <View style={{flex: 1}}>
+          <UpdateUser nav={navigator} project={route.project} />
         </View>
       )
     }

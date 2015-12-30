@@ -19,9 +19,6 @@ var {
 var styles = require("./style");
 
 var ProjectCell = React.createClass({
-  editAction:()=>{
-    ToastAndroid.show('Now you want to edit user profile', ToastAndroid.SHORT)
-  },
   render: function() {
     var project = this.props.project;
     return (
@@ -42,7 +39,7 @@ var ProjectCell = React.createClass({
           </View>
         </View>
       </TouchableHighlight>
-      <Button text='编辑' style={{backgroundColor:'green',overflow:'hidden'}} onclick={this.editAction}></Button>
+      <Button text='编辑' style={{backgroundColor:'green',overflow:'hidden'}} onclick={()=>this.props.editAction(project)}></Button>
       <Button text='删除' style={{backgroundColor:'red',overflow:'hidden'}} onclick={() =>this.props.deleteAction(project)}></Button>
       </ScrollView>
     );

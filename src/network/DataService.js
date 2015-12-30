@@ -45,13 +45,26 @@ function deleteUser (userid) {
   })
 }
 
+function updateUser (data) {
+  var userid=data.userid;
+  return fetch(`${SERVER}/users/${userid}`, {
+    method: 'PUT',
+	  headers: {
+		'Accept': 'application/json',
+    'Content-Type': 'application/json',
+	  },
+	  body: JSON.stringify(data)
+  })
+}
+
 
 var DataService = {
 	'getProjectList':getProjectList,
 	'getIssuesList':getIssuesList,
 	'getProjectIssuesList': getProjectIssuesList,
   'addUser':addUser,
-  'deleteUser':deleteUser
+  'deleteUser':deleteUser,
+  'updateUser':updateUser
 };
 
 module.exports = DataService

@@ -8,6 +8,7 @@
   "dependencies": {
     "lodash": "^3.10.1",
     "react-native": "^0.17.0",
+    "react-native-dropdown-android": "0.0.7",
     "react-native-icons": "^0.7.0"
   }
 }

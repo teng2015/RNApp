@@ -48,4 +48,7 @@ module.exports = StyleSheet.create({
   TextInputs:{
     fontSize:16
   },
+  touch:{
+    marginTop:110,
+  },
 });

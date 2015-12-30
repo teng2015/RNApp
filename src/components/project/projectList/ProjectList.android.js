@@ -94,7 +94,8 @@ var ProjectList = React.createClass({
       <ProjectCell
         onSelect={() => this.selectProject(project)}
         project={project}
-        deleteAction={()=>this.deleteAction(project)}/>
+        deleteAction={()=>this.deleteAction(project)}
+        editAction={()=>this.editAction(project)}/>
     );
   },
 
@@ -104,32 +105,40 @@ var ProjectList = React.createClass({
       project: project,
     });
   },
+  editAction: function(project) {
+    this.props.nav.push({
+      id: 'UpdateUser',
+      project: project,
+    });
+  },
   deleteAction:function(project){
+    Alert.alert('删除用户','是否删除该用户？',[{text: '取消', onPress: () => console.log('Cancel Pressed!')},{text: '确认', onPress: () => this.deleteUsers(project)}]);
+  },
+  //删除用户
+  deleteUsers:function(project){
     var userid=project._id;
-    Alert.alert('删除用户','是否删除该用户？',[{text: '取消', onPress: () => console.log('Cancel Pressed!')},{text: '确认', onPress: () => {
-      DataService.deleteUser(userid)
-      .then((responseText) => {
-        if (responseText.error) {
-          ToastAndroid.show("删除失败", ToastAndroid.SHORT)
-        }
-        else {
-          ToastAndroid.show("删除成功", ToastAndroid.SHORT)
-          if(currentData&&currentData.length>0&&!!project){
-            let tempIds=_.pluck(currentData,'_id'),
-              _index=tempIds.indexOf(project['_id'])
-            ;
-            if(_index>-1){
-              currentData.splice(_index,1);
-              var temp=new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2});
-              this.setState({
-                dataSource: temp.cloneWithRows(currentData),
-                loaded: true
-              });
-            }
+    DataService.deleteUser(userid)
+    .then((responseText) => {
+      if (responseText.error) {
+        ToastAndroid.show("删除失败", ToastAndroid.SHORT)
+      }
+      else {
+        ToastAndroid.show("删除成功", ToastAndroid.SHORT)
+        if(currentData&&currentData.length>0&&!!project){
+          let tempIds=_.pluck(currentData,'_id'),
+            _index=tempIds.indexOf(project['_id'])
+          ;
+          if(_index>-1){
+            currentData.splice(_index,1);
+            var temp=new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2});
+            this.setState({
+              dataSource: temp.cloneWithRows(currentData),
+              loaded: true
+            });
           }
         }
-      })
-    }}]);
+      }
+    })
   },
 });
 
