@@ -77,4 +77,5 @@ dependencies {
     compile "com.facebook.react:react-native:0.17.+"
     compile project(':react-native-icons')
     compile project(':ReactNativeDropdownAndroid')
+    compile project(':react-native-image-picker')
 }

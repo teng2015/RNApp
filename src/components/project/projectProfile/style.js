@@ -20,4 +20,9 @@ module.exports = StyleSheet.create({
     justifyContent: 'center',
     borderRadius:80
   },
+  items:{
+    alignItems: 'center',
+    fontSize:16,
+    paddingTop:10
+  }
 });

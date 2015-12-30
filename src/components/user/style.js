@@ -28,6 +28,12 @@ module.exports = StyleSheet.create({
     backgroundColor:'green',
 
   },
+  userImage: {
+    height: 140,
+    width: 140,
+    justifyContent: 'center',
+    borderRadius:80
+  },
   text:{
     fontSize:22,
     color:'white'

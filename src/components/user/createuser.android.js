@@ -7,6 +7,7 @@ var styles = require("./style");
 var DataService = require('../../network/DataService');
 var Dimensions=require('Dimensions');
 var Dropdown = require('react-native-dropdown-android');
+var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 
 var createuser = React.createClass({
   getInitialState: function() {
@@ -15,8 +16,36 @@ var createuser = React.createClass({
 	  ages: null,
 	  citys: null,
     sexs:0,
+    avatarSource: null,
     };
   },
+  avatarTapped:function() {
+   var options = {
+       title: '选择图片',
+       cancelButtonTitle: '取消',
+       takePhotoButtonTitle: '拍照',
+       chooseFromLibraryButtonTitle: '从图库中获取',
+       maxWidth: 500,
+       maxHeight: 500,
+       quality: 0.2,//图片的质量
+       noData: false, // Disables the base64 `data` field from being generated (greatly improves performance on large photos)
+   };
+     UIImagePickerManager.showImagePicker(options, (didCancel, response) => {
+       console.log('Response = ', response);
+
+       if (didCancel) {
+         console.log('User cancelled image picker');
+       }
+       else {
+           // You can display the image using either:
+           const source = {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true};
+           //const source = {uri: response.uri.replace('file://', ''), isStatic: true};
+           this.setState({
+             avatarSource: source
+           });
+       }
+     });
+   },
   render: function () {
     return (
       <View style={styles.container}>
@@ -24,7 +53,17 @@ var createuser = React.createClass({
 
       <ScrollView>
         <View style={styles.todo}>
-          <View style={{borderColor: '#CBCACA',}}>
+        <View>
+        <TouchableOpacity onPress={this.avatarTapped}>
+          <View style={{alignItems:'center'}}>
+          { this.state.avatarSource === null ? <Text>上传头像</Text> :
+            <Image style={styles.userImage} source={this.state.avatarSource} />
+          }
+          </View>
+        </TouchableOpacity>
+        </View>
+
+          <View>
             <Text style={styles.texts}>姓名</Text>
             <View style={styles.adduserInput}>
             <TextInput
@@ -86,6 +125,7 @@ var createuser = React.createClass({
           age: this.state.ages,
           city: this.state.citys,
           __v:this.state.sex,
+          avatar:this.state.avatarSource.uri.toString()
         };
   if(!this.state.names || !this.state.ages || !this.state.citys){
       ToastAndroid.show("请确认信息是否填写完整！！！", ToastAndroid.SHORT)
@@ -96,6 +136,8 @@ var createuser = React.createClass({
           .then((responseText) => {
             if (responseText.error) {
               ToastAndroid.show("创建失败", ToastAndroid.SHORT)
+              ToastAndroid.show(this.state.avatarSource.uri.toString(), ToastAndroid.LONG)
+
             }
             else
             {
