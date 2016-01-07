@@ -22,9 +22,11 @@ var NavTab = React.createClass({
 
     var navItems=[
       {title:"项目", icon:'fontawesome|book',     onSelect:()=>{nav.popToTop(); nav.replace({id: 'ProjectList'});}  },
-      {title:"议题", icon:'fontawesome|bookmark', onSelect:()=>{nav.popToTop(); nav.replace({id: 'IssuesList'});}   },
+      {title:"议题", icon:'fontawesome|bookmark', onSelect:()=>{nav.popToTop(); nav.replace({id: 'ProjectList'});}   },
       {title:"博客", icon:'fontawesome|rss',      onSelect:()=>{nav.popToTop(); nav.push({id: 'Blog'});}        },
       {title:"设置", icon:'fontawesome|cog',      onSelect:()=>{nav.popToTop(); nav.push({id: 'Setting'});}      },
+      {title:"modal", icon:'fontawesome|desktop',      onSelect:()=>{nav.popToTop(); nav.push({id: 'ModalTest'});}      },
+      {title:"dialog", icon:'fontawesome|desktop',      onSelect:()=>{nav.popToTop(); nav.push({id: 'DialogsTest'});}      },
     ];
     var dataSource = new ListView.DataSource({rowHasChanged: (row1, row2) => row1.title !== row2.title});
     return {

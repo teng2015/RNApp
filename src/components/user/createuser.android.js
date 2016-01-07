@@ -1,15 +1,24 @@
 'use strict';
 
 var React = require('react-native');
-var { Text, View, ListView, TouchableHighlight, Image,TextInput,TouchableOpacity,ToastAndroid,ScrollView} = React;
+var { Text, View, ListView, TouchableHighlight, Image,TextInput,TouchableOpacity,ToastAndroid,ScrollView,NativeModules, Dimensions,} = React;
 var NavToolbar = require('../navigation/navToolBar/NavToolBar.android');
 var styles = require("./style");
 var DataService = require('../../network/DataService');
 var Dimensions=require('Dimensions');
 var Dropdown = require('react-native-dropdown-android');
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
+var RNALocation = require('react-native-android-location');
+var { DeviceEventEmitter } = require('react-native');
+var Contacts = require('react-native-contacts');
+var Calendar = require('react-native-calendar-android');
+var SmsAndroid = require('react-native-sms-android');
+var Button  = require('react-native-button');
+var Circles = require('react-native-android-circles');
+
 
 var createuser = React.createClass({
+
   getInitialState: function() {
     return {
     names: null,
@@ -17,8 +26,52 @@ var createuser = React.createClass({
 	  citys: null,
     sexs:0,
     avatarSource: null,
+    lng: 0.0,
+    lat: 0.0,
     };
   },
+  componentDidMount: function() {
+      //测试经纬度
+      DeviceEventEmitter.addListener('updateLocation', function(e: Event) {
+          this.setState({lng: e.Longitude, lat: e.Latitude });
+      }.bind(this));
+      RNALocation.getLocation();
+      console.log('111111111111111111111111111111111');
+    //发短信
+    //   SmsAndroid.sms(
+    //   '15764219896', // phone number to send sms to
+    //   'tnskjdfnskfjsdmfsklfmsdfksdlfsjdklgsdgjklgjdsgkl', // sms body
+    //   'sendIndirect', // sendDirect or sendIndirect
+    //   (err, message) => {
+    //     if (err){
+    //       ToastAndroid.show("error", ToastAndroid.SHORT)
+    //     } else {
+    //       ToastAndroid.show(message.toString(), ToastAndroid.SHORT)
+    //     }
+    //   }
+    // );
+    //获取所有的联系人
+      // Contacts.getAll((err, contacts) => {
+      //   if(err && err.type === 'permissionDenied'){
+      //     ToastAndroid.show("permissionDenied", ToastAndroid.SHORT)
+      //   } else {
+      //     console.log(contacts)
+      //     ToastAndroid.show(contacts[0].middleName.toString(), ToastAndroid.SHORT)
+      //     ToastAndroid.show(contacts[0].givenName.toString(), ToastAndroid.SHORT)
+      //     ToastAndroid.show(contacts[0].phoneNumbers.toString(), ToastAndroid.SHORT)
+      //     ToastAndroid.show(contacts[0].emailAddresses.toString(), ToastAndroid.SHORT)
+      //     ToastAndroid.show(contacts[0].thumbnailPath.toString(), ToastAndroid.SHORT)
+      //     ToastAndroid.show(contacts.toString(), ToastAndroid.SHORT)
+      //   }
+      // })
+  },
+  //date
+  handleClick: function () {
+      NativeModules.DateAndroid.showTimepicker(function() {}, function(hour, minute) {
+       ToastAndroid.show(hour + ":" + minute, ToastAndroid.SHORT)
+      });
+    },
+
   avatarTapped:function() {
    var options = {
        title: '选择图片',
@@ -50,7 +103,6 @@ var createuser = React.createClass({
     return (
       <View style={styles.container}>
         <NavToolbar icon={"ic_arrow_back_white_24dp"} title='创建' onClicked={() => {this.props.nav.pop();}} />
-
       <ScrollView>
         <View style={styles.todo}>
         <View>
@@ -62,6 +114,42 @@ var createuser = React.createClass({
           </View>
         </TouchableOpacity>
         </View>
+
+         <View>
+            <Button onPress={this.handleClick}>时间选择器</Button>
+         </View>
+
+          <View>
+            <Circles
+                style={{width: 250, height: 250}}
+                сontourColor="#f4f4f4"
+                rimColor="#f4f4f4"
+                barColors={["#15e064", "#17aecc", "#15e064"]}
+                value={100}
+                maxValue={100}
+                сontourSize={280}
+                rimWidth={120}
+                barWidth={100}
+                animated={true}
+              />
+          </View>
+
+         <View>
+             <Calendar
+             width={300}
+             topbarVisible={true}
+             arrowColor="#2212a7"
+             firstDayOfWeek="monday"
+             showDate="all"
+             currentDate={[ "2016/12/01" ]}
+             selectionMode="multiple"
+             selectionColor="#dadafc"
+             selectedDates={[ "2015/11/20", "2015/11/30", 1448745712382 ]}
+             onDateChange={(data) => {
+               ToastAndroid.show(data.selected.toString(), ToastAndroid.SHORT);
+               ToastAndroid.show(data.date.toString(), ToastAndroid.SHORT)
+             }} />
+         </View>
 
           <View>
             <Text style={styles.texts}>姓名</Text>
@@ -84,6 +172,7 @@ var createuser = React.createClass({
             <View  style={styles.adduserInput}>
             <TextInput
             ref="textcity"
+            //secureTextEntry={true} 密码
             onFocus={()=>{this.refs.textcity.focus()}} textAlign={'center'} textAlignVertical={'top'} style={styles.TextInputs} onChangeText={(text) => this.setState({citys: text})} />
             </View>
           </View>
@@ -94,6 +183,12 @@ var createuser = React.createClass({
             style={{ height: 30,justifyContent: 'center',paddingTop:20}}
             values={['女','男']}
             selected={0} onChange={(date) => this.setState({sex: date.value})} />
+          </View>
+
+          <View>
+                 <Text>
+                   经度: {this.state.lng} 纬度: {this.state.lat}
+                 </Text>
           </View>
 
           </View>
@@ -136,22 +231,17 @@ var createuser = React.createClass({
           .then((responseText) => {
             if (responseText.error) {
               ToastAndroid.show("创建失败", ToastAndroid.SHORT)
-              ToastAndroid.show(this.state.avatarSource.uri.toString(), ToastAndroid.LONG)
-
             }
             else
             {
-              ToastAndroid.show("创建成功", ToastAndroid.SHORT)
               this.props.nav.push({
                 id: 'ProjectList',
               });
-
+              ToastAndroid.show("创建成功", ToastAndroid.SHORT)
             }
 
           })
     }
-
-
   }
 
 

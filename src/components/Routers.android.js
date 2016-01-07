@@ -9,6 +9,8 @@ var IssuesProfile = require('./issues/issuesProfile/IssuesProfile.android');
 var Todo = require('./common/todo/Todo.android');
 var CreateUser=require('./user/createuser.android');
 var UpdateUser=require('./user/updateuser.android');
+var ModalTest=require('./user/modaltest');
+var DialogsTest=require('./user/dialogstest')
 
 var _navigator;
 
@@ -45,10 +47,19 @@ var Routers = React.createClass({
         </View>
       )
     }
+    if (route.id === 'ModalTest') {
+      return (
+        <View style={{flex: 1}}>
+          <ModalTest nav={navigator} />
+        </View>
+      )
+    }
     if (route.id === 'IssuesList') {
       return (
         <View style={{flex: 1}}>
-          <IssuesList nav={navigator} />
+          <Todo nav={navigator}>
+            <Text>尚未实现</Text>
+          </Todo>
         </View>
       );
     }
@@ -95,6 +106,13 @@ var Routers = React.createClass({
       return (
         <View style={{flex: 1}}>
           <UpdateUser nav={navigator} project={route.project} />
+        </View>
+      )
+    }
+    if (route.id === 'DialogsTest') {
+      return (
+        <View style={{flex: 1}}>
+          <DialogsTest nav={navigator} />
         </View>
       )
     }

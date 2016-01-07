@@ -8,8 +8,15 @@ var NavToolbar = require('../../navigation/navToolBar/NavToolBar.android');
 var ProjectCell = require('./projectCell/ProjectCell.android');
 var styles = require("./style");
 var _=require("lodash");
+var Notification=require('../../notification/notificationApi');
+var ActionButton = require('react-native-action-button');
+var { Icon, } = require('react-native-icons');
+var BusyIndicator = require('react-native-busy-indicator');
+var loaderHandler = require('react-native-busy-indicator/LoaderHandler');
+var TimerMixin = require('react-native-timer-mixin');
 
 var ProjectList = React.createClass({
+    mixins: [TimerMixin],
   getInitialState: function() {
     return {
       dataSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
@@ -29,6 +36,8 @@ var ProjectList = React.createClass({
         });
       })
       .done();
+      this.Noti();
+      this.handlePress();
   },
 
   onToolbarClicked:  function (){
@@ -38,7 +47,6 @@ var ProjectList = React.createClass({
   _refreshData:function(){
     DataService.getProjectList()
       .then(responseData=>{
-        ToastAndroid.show('yeah!',ToastAndroid.SHORT)
         if(!!responseData){
           currentData = responseData;
         }
@@ -54,6 +62,24 @@ var ProjectList = React.createClass({
       id: 'CreateUser',
     });
   },
+  Noti:function(){
+    Notification.create({
+      id: 1337,
+      subject: 'hello',
+      message: '这是通知内容。。。。。。..........',
+      smallIcon: 'apple',
+      autoClear: true,
+      payload: { number: 2, what: true, someAnswer: '42' }
+    });
+  },
+  handlePress:function() {
+    loaderHandler.showLoader("Loading");
+    this.setTimeout(
+      () => { loaderHandler.hideLoader("Loading") },
+      3000
+    );
+  },
+
   render: function() {
     var content = (
       // <PullToRefreshViewAndroid onRefresh={this._refreshData} style={{flex:1}}>
@@ -64,14 +90,12 @@ var ProjectList = React.createClass({
           style={styles.projectListView} />
       // </PullToRefreshViewAndroid>
     );
-
     if(!this.state.loaded){
       content = (
         <View style={styles.loading}>
-          <Text>
-            载入项目中...
-          </Text>
+          <BusyIndicator/>
         </View>
+
       );
     }
     return (
@@ -85,6 +109,32 @@ var ProjectList = React.createClass({
           onActionSelected={this._onActionSelected}
           actions={toolbarActions}/>
         {content}
+       <ActionButton buttonColor="rgba(231,76,60,1)">
+         <ActionButton.Item buttonColor='#9b59b6' title="New Task" onPress={() => console.log("notes tapped!")}>
+         <Icon
+           name='fontawesome|home'
+           size={23}
+           color='#fff'
+           style={{width:30,height: 23}}
+         />
+         </ActionButton.Item>
+         <ActionButton.Item buttonColor='#3498db' title="Notifications" onPress={() => {}}>
+         <Icon
+           name='fontawesome|heart'
+           size={23}
+           color='#fff'
+           style={{width:30,height: 23}}
+         />
+         </ActionButton.Item>
+         <ActionButton.Item buttonColor='#1abc9c' title="All Tasks" onPress={() => {}}>
+         <Icon
+           name='fontawesome|star'
+           size={23}
+           color='#fff'
+           style={{width:30,height: 23}}
+         />
+         </ActionButton.Item>
+       </ActionButton>
       </NavTab>
     );
   },

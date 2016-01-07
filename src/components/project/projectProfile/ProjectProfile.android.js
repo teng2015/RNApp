@@ -1,11 +1,13 @@
 'use strict';
 
 var React = require('react-native');
-var { View, Text,Image,ScrollView} = React;
+var { View, Text,Image,ScrollView,Dimensions} = React;
 var NavToolbar = require('../../navigation/navToolBar/NavToolBar.android')
 var BaseInfo = require('./baseInfo/BaseInfo.android');
 var Issues = require('./issues/Issues.android');
 var styles = require('./style');
+
+
 
 var ProjectProfile = React.createClass({
   getInitialState: function() {
@@ -48,7 +50,7 @@ var ProjectProfile = React.createClass({
           onActionSelected={this._onActionSelected}
            />
            <ScrollView>
-          <View style={{alignItems: 'center'}}>
+          <View style={{alignItems: 'center',marginTop:20}}>
           <Image
              source={{uri: project.avatar}}
              style={styles.projectImage}

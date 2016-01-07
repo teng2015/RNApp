@@ -70,6 +70,9 @@ android {
         }
     }
 }
+repositories {
+    maven { url "https://jitpack.io" }
+}
 
 dependencies {
     compile fileTree(dir: "libs", include: ["*.jar"])
@@ -78,4 +81,12 @@ dependencies {
     compile project(':react-native-icons')
     compile project(':ReactNativeDropdownAndroid')
     compile project(':react-native-image-picker')
+    compile project(':react-native-system-notification')
+    compile project(':RNAlocation')
+    compile project(':react-native-contacts')
+    compile project(':react-native-dialogs')
+    compile project(':reactdate')
+    compile project(':ReactNativeCalendarAndroid')
+    compile project(':react-native-sms-android')
+    compile project(':react-native-android-circles')
 }

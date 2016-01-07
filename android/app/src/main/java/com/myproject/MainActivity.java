@@ -14,24 +14,45 @@ import com.smixx.reactnativeicons.ReactNativeIcons;
 import com.chymtt.reactnativedropdown.DropdownPackage;
 import android.content.Intent; // import
 import com.imagepicker.ImagePickerPackage; // import
+import io.neson.react.notification.NotificationPackage;
+import com.syarul.rnalocation.RNALocation;
+import com.rt2zz.reactnativecontacts.ReactNativeContacts;
+import android.support.v4.app.FragmentActivity;
+import me.nucleartux.date.ReactDatePackage;
+import com.aakashns.reactnativedialogs.ReactNativeDialogsPackage;
+import com.chymtt.reactnativecalendar.CalendarPackage;
+import com.rhaker.reactnativesmsandroid.RNSmsAndroidPackage;
+import com.kwaak.reacttwo.CirclesPackage;
 
-public class MainActivity extends Activity implements DefaultHardwareBackBtnHandler {
+public class MainActivity extends FragmentActivity implements DefaultHardwareBackBtnHandler {
 
     private ReactInstanceManager mReactInstanceManager;
     private ReactRootView mReactRootView;
     private ImagePickerPackage mImagePicker;
+    private RNSmsAndroidPackage mRNSmsAndroidPackage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mReactRootView = new ReactRootView(this);
+        mRNSmsAndroidPackage = new RNSmsAndroidPackage(this);
         mImagePicker = new ImagePickerPackage(this);
         mReactInstanceManager = ReactInstanceManager.builder()
                 .setApplication(getApplication())
                 .setBundleAssetName("index.android.bundle")
                 .setJSMainModuleName("index.android")
                 .addPackage(new MainReactPackage())
+                .addPackage(new CirclesPackage())  
+                .addPackage(mRNSmsAndroidPackage)
+                .addPackage(new ReactDatePackage(this))
+                .addPackage(new CalendarPackage())
+                .addPackage(new ReactNativeDialogsPackage(this))
+                .addPackage(new ReactNativeContacts())
+                .addPackage(new RNALocation())
+                .addPackage(new NotificationPackage(this))
                 .addPackage(new DropdownPackage())
+                .addPackage(new ReactNativeIcons())
                 .addPackage(mImagePicker)
                 .setUseDeveloperSupport(BuildConfig.DEBUG)
                 .setInitialLifecycleState(LifecycleState.RESUMED)
