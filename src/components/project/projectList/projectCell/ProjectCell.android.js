@@ -13,7 +13,8 @@ var {
   Image,
   ScrollView,
   TouchableHighlight,
-  ToastAndroid
+  ToastAndroid,
+  TouchableNativeFeedback
 } = React;
 
 var styles = require("./style");
@@ -22,8 +23,8 @@ var ProjectCell = React.createClass({
   render: function() {
     var project = this.props.project;
     return (
-      <ScrollView horizontal={true} style={styles.scroll} showsHorizontalScrollIndicator={false} >
-      <TouchableHighlight onPress={this.props.onSelect} style={{overflow:'hidden'}}>
+      <ScrollView horizontal={true} style={styles.scroll} showsHorizontalScrollIndicator={false} overflow={'visiable'} ref="scroll">
+      <TouchableNativeFeedback onPress={this.props.onSelect}  style={{overflow:'hidden'}}>
         <View style={styles.container}>
           <Image
             source={{uri: project.avatar}}
@@ -38,12 +39,23 @@ var ProjectCell = React.createClass({
             </Text>
           </View>
         </View>
-      </TouchableHighlight>
+      </TouchableNativeFeedback>
       <Button text='编辑' style={{backgroundColor:'green',overflow:'hidden'}} onclick={()=>this.props.editAction(project)}></Button>
-      <Button text='删除' style={{backgroundColor:'red',overflow:'hidden'}} onclick={() =>this.props.deleteAction(project)}></Button>
+      <Button text='删除' style={{backgroundColor:'red',overflow:'hidden'}} onclick={() =>this.deleteAction()}></Button>
       </ScrollView>
     );
   },
+  deleteAction:function(){
+    this.props.deleteAction(()=>this.scrollBack());
+  },
+  cancelAction:function(){
+    this.props.cancelAction(()=>this.scrollBack());
+  },
+  scrollBack:function(){
+    if (this.refs.scroll){
+    this.refs.scroll.scrollTo(0,  0);
+  }
+},
 });
 
 module.exports = ProjectCell;

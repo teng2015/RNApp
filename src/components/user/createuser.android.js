@@ -16,7 +16,6 @@ var SmsAndroid = require('react-native-sms-android');
 var Button  = require('react-native-button');
 var Circles = require('react-native-android-circles');
 
-
 var createuser = React.createClass({
 
   getInitialState: function() {
@@ -36,7 +35,6 @@ var createuser = React.createClass({
           this.setState({lng: e.Longitude, lat: e.Latitude });
       }.bind(this));
       RNALocation.getLocation();
-      console.log('111111111111111111111111111111111');
     //发短信
     //   SmsAndroid.sms(
     //   '15764219896', // phone number to send sms to
@@ -55,13 +53,11 @@ var createuser = React.createClass({
       //   if(err && err.type === 'permissionDenied'){
       //     ToastAndroid.show("permissionDenied", ToastAndroid.SHORT)
       //   } else {
-      //     console.log(contacts)
-      //     ToastAndroid.show(contacts[0].middleName.toString(), ToastAndroid.SHORT)
-      //     ToastAndroid.show(contacts[0].givenName.toString(), ToastAndroid.SHORT)
-      //     ToastAndroid.show(contacts[0].phoneNumbers.toString(), ToastAndroid.SHORT)
-      //     ToastAndroid.show(contacts[0].emailAddresses.toString(), ToastAndroid.SHORT)
-      //     ToastAndroid.show(contacts[0].thumbnailPath.toString(), ToastAndroid.SHORT)
-      //     ToastAndroid.show(contacts.toString(), ToastAndroid.SHORT)
+      //
+      //     Array.prototype.forEach.call(contacts, function(aaa) {
+      //       ToastAndroid.show(JSON.stringify(aaa), ToastAndroid.SHORT);
+      //       ToastAndroid.show(aaa.givenName.toString()+" "+aaa.phoneNumbers[0].number, ToastAndroid.SHORT);
+      //   });
       //   }
       // })
   },
@@ -108,7 +104,8 @@ var createuser = React.createClass({
         <View>
         <TouchableOpacity onPress={this.avatarTapped}>
           <View style={{alignItems:'center'}}>
-          { this.state.avatarSource === null ? <Text>上传头像</Text> :
+          { this.state.avatarSource === null ?
+            <Image style={styles.userImage} source={{uri: 'https://resource-huobanyun-cn.alikunlun.com/3.1.142/content/images/avatar_default.jpg'}}/>:
             <Image style={styles.userImage} source={this.state.avatarSource} />
           }
           </View>
@@ -116,23 +113,8 @@ var createuser = React.createClass({
         </View>
 
          <View>
-            <Button onPress={this.handleClick}>时间选择器</Button>
+            <Button style={{backgroundColor:'#18D5EA',height:30,marginTop:20}}onPress={this.handleClick}>时间选择器</Button>
          </View>
-
-          <View>
-            <Circles
-                style={{width: 250, height: 250}}
-                сontourColor="#f4f4f4"
-                rimColor="#f4f4f4"
-                barColors={["#15e064", "#17aecc", "#15e064"]}
-                value={100}
-                maxValue={100}
-                сontourSize={280}
-                rimWidth={120}
-                barWidth={100}
-                animated={true}
-              />
-          </View>
 
          <View>
              <Calendar
@@ -186,9 +168,9 @@ var createuser = React.createClass({
           </View>
 
           <View>
-                 <Text>
-                   经度: {this.state.lng} 纬度: {this.state.lat}
-                 </Text>
+             <Text>
+               经度: {this.state.lng} 纬度: {this.state.lat}
+             </Text>
           </View>
 
           </View>
@@ -215,13 +197,28 @@ var createuser = React.createClass({
       default:
 
     }
-    var usersparm = {
-          name: this.state.names,
-          age: this.state.ages,
-          city: this.state.citys,
-          __v:this.state.sex,
-          avatar:this.state.avatarSource.uri.toString()
-        };
+    if(this.state.avatarSource === null)
+    {
+          var usersparm = {
+                name: this.state.names,
+                age: this.state.ages,
+                city: this.state.citys,
+                __v:this.state.sex,
+                avatar:'https://resource-huobanyun-cn.alikunlun.com/3.1.142/content/images/avatar_default.jpg'
+          };
+    }
+    else
+    {
+        var usersparm = {
+              name: this.state.names,
+              age: this.state.ages,
+              city: this.state.citys,
+              __v:this.state.sex,
+              avatar:this.state.avatarSource.uri.toString(),
+            };
+    }
+
+
   if(!this.state.names || !this.state.ages || !this.state.citys){
       ToastAndroid.show("请确认信息是否填写完整！！！", ToastAndroid.SHORT)
     }

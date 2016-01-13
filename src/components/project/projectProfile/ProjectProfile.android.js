@@ -1,12 +1,13 @@
 'use strict';
 
 var React = require('react-native');
-var { View, Text,Image,ScrollView,Dimensions} = React;
+var { View, Text,Image,ScrollView,Dimensions,ToastAndroid} = React;
 var NavToolbar = require('../../navigation/navToolBar/NavToolBar.android')
 var BaseInfo = require('./baseInfo/BaseInfo.android');
 var Issues = require('./issues/Issues.android');
 var styles = require('./style');
-
+var Lightbox = require('react-native-lightbox');
+var ConsolePanel = require('react-native-console-panel').displayWhenDev();
 
 
 var ProjectProfile = React.createClass({
@@ -40,7 +41,7 @@ var ProjectProfile = React.createClass({
     var dt= project.createdate;
     var createdate=dt.substr(0,16);
     var newdate=createdate.replace("T","  ");
-
+// ToastAndroid.show(JSON.stringify(this.props.nav), ToastAndroid.SHORT);
     return (
 
       <View style={{flex:1}}>
@@ -51,10 +52,10 @@ var ProjectProfile = React.createClass({
            />
            <ScrollView>
           <View style={{alignItems: 'center',marginTop:20}}>
-          <Image
-             source={{uri: project.avatar}}
-             style={styles.projectImage}
-           />
+         <Image
+          style={styles.projectImage}
+           source={{uri: project.avatar }}
+         />
             <View style={{paddingTop:15}}>
               <Text style={styles.items}>
                 姓名 {project.name}
@@ -71,6 +72,7 @@ var ProjectProfile = React.createClass({
             </View>
           </View>
           </ScrollView>
+          {ConsolePanel}
       </View>
 
     );

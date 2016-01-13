@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react-native');
-var { Text, View, ListView, ToastAndroid ,PullToRefreshViewAndroid,ScrollView,Alert} = React;
+var { Text, View, ListView, ToastAndroid ,PullToRefreshViewAndroid,ScrollView,Alert,TouchableOpacity,Image} = React;
 var DataService = require('../../../network/DataService');
 var NavTab = require('../../navigation/navTab/NavTab.android');
 var NavToolbar = require('../../navigation/navToolBar/NavToolBar.android');
@@ -14,16 +14,52 @@ var { Icon, } = require('react-native-icons');
 var BusyIndicator = require('react-native-busy-indicator');
 var loaderHandler = require('react-native-busy-indicator/LoaderHandler');
 var TimerMixin = require('react-native-timer-mixin');
+var ConsolePanel = require('react-native-console-panel').displayWhenDev();
+var ViewPager = require('react-native-viewpager');
+var imagedata = [
+  {title: '标题1', image:'https://images.unsplash.com/photo-1441742917377-57f78ee0e582?h=1024'},
+  {title: '标题2', image:'https://images.unsplash.com/photo-1441716844725-09cedc13a4e7?h=1024'},
+  {title: '标题3', image:'https://images.unsplash.com/photo-1441448770220-76743f9e6af6?h=1024'},
+  {title: '标题4', image:'https://images.unsplash.com/photo-1441260038675-7329ab4cc264?h=1024'},
+  {title: '标题5', image:'https://images.unsplash.com/photo-1441126270775-739547c8680c?h=1024'},
+];
 
 var ProjectList = React.createClass({
     mixins: [TimerMixin],
   getInitialState: function() {
-    return {
-      dataSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
-      loaded: false,
-    };
-  },
+  var dataSource = new ListView.DataSource({
+    rowHasChanged: (row1, row2) => row1 !== row2,
+   });
 
+  var headerDataSource = new ViewPager.DataSource({
+    pageHasChanged: (p1, p2) => p1 !== p2,
+  });
+
+  return {
+    isLoading: false,
+    isLoadingTail: false,
+    dataSource: dataSource,
+    headerDataSource: headerDataSource.cloneWithPages(imagedata),
+   };
+  },
+  _renderPage: function(
+    story: Object,
+    pageID: number | string,) {
+    return (
+      <TouchableOpacity style={{flex: 1}}>
+        <Image
+          source={{uri: story.image}}
+          style={styles.headerItem}>
+          <View style={styles.headerTitleContainer}>
+            <Text style={styles.headerTitle}
+              numberOfLines={2}>
+              {story.title}
+            </Text>
+          </View>
+        </Image>
+      </TouchableOpacity>
+    )
+  },
   componentDidMount: function() {
     DataService.getProjectList()
       .then(responseData=>{
@@ -79,7 +115,18 @@ var ProjectList = React.createClass({
       3000
     );
   },
-
+_renderHeader:function(){
+  return (
+        <View style={{flex: 1, height: 200}}>
+        <ViewPager
+          dataSource={this.state.headerDataSource}
+          style={styles.listHeader}
+          renderPage={this._renderPage}
+          isLoop={true}
+          autoPlay={true} />
+        </View>
+      );
+},
   render: function() {
     var content = (
       // <PullToRefreshViewAndroid onRefresh={this._refreshData} style={{flex:1}}>
@@ -87,7 +134,9 @@ var ProjectList = React.createClass({
           dataSource={this.state.dataSource}
           renderRow={this.renderProject}
           pageSize={10}
-          style={styles.projectListView} />
+          style={styles.projectListView}
+          automaticallyAdjustContentInsets={false}
+          renderHeader={this._renderHeader} />
       // </PullToRefreshViewAndroid>
     );
     if(!this.state.loaded){
@@ -105,12 +154,14 @@ var ProjectList = React.createClass({
         <NavToolbar icon={"ic_menu_white"}
           nav={this.props.nav}
           title={'用户'}
+          titleColor="white"
           onClicked={this.onToolbarClicked}
           onActionSelected={this._onActionSelected}
           actions={toolbarActions}/>
         {content}
+        {ConsolePanel}
        <ActionButton buttonColor="rgba(231,76,60,1)">
-         <ActionButton.Item buttonColor='#9b59b6' title="New Task" onPress={() => console.log("notes tapped!")}>
+         <ActionButton.Item buttonColor='#9b59b6' title="New Task" onPress={() => ToastAndroid.show("你点击了 New Task", ToastAndroid.SHORT)}>
          <Icon
            name='fontawesome|home'
            size={23}
@@ -118,7 +169,7 @@ var ProjectList = React.createClass({
            style={{width:30,height: 23}}
          />
          </ActionButton.Item>
-         <ActionButton.Item buttonColor='#3498db' title="Notifications" onPress={() => {}}>
+         <ActionButton.Item buttonColor='#3498db' title="Notifications" onPress={() =>ToastAndroid.show("你点击了 Notifications", ToastAndroid.SHORT)}>
          <Icon
            name='fontawesome|heart'
            size={23}
@@ -126,7 +177,7 @@ var ProjectList = React.createClass({
            style={{width:30,height: 23}}
          />
          </ActionButton.Item>
-         <ActionButton.Item buttonColor='#1abc9c' title="All Tasks" onPress={() => {}}>
+         <ActionButton.Item buttonColor='#1abc9c' title="All Tasks" onPress={() =>ToastAndroid.show("你点击了 All Tasks", ToastAndroid.SHORT)}>
          <Icon
            name='fontawesome|star'
            size={23}
@@ -144,7 +195,7 @@ var ProjectList = React.createClass({
       <ProjectCell
         onSelect={() => this.selectProject(project)}
         project={project}
-        deleteAction={()=>this.deleteAction(project)}
+        deleteAction={callb=>this.deleteAction(project,callb)}
         editAction={()=>this.editAction(project)}/>
     );
   },
@@ -161,18 +212,24 @@ var ProjectList = React.createClass({
       project: project,
     });
   },
-  deleteAction:function(project){
-    Alert.alert('删除用户','是否删除该用户？',[{text: '取消', onPress: () => console.log('Cancel Pressed!')},{text: '确认', onPress: () => this.deleteUsers(project)}]);
+  deleteAction:function(project,callb){
+    Alert.alert('删除用户','是否删除该用户？',[{text: '取消', onPress: () =>this.cancelAction(project,callb) },{text: '确认', onPress: () => this.deleteUsers(project,callb)}]);
+  },
+  cancelAction:function(project,callb){
+    callb&&callb();
+    console.log('Cancel Pressed!');
   },
   //删除用户
-  deleteUsers:function(project){
+  deleteUsers:function(project,callb){
     var userid=project._id;
     DataService.deleteUser(userid)
     .then((responseText) => {
       if (responseText.error) {
+        callb&&callb();
         ToastAndroid.show("删除失败", ToastAndroid.SHORT)
       }
       else {
+        callb&&callb();
         ToastAndroid.show("删除成功", ToastAndroid.SHORT)
         if(currentData&&currentData.length>0&&!!project){
           let tempIds=_.pluck(currentData,'_id'),
@@ -190,12 +247,14 @@ var ProjectList = React.createClass({
       }
     })
   },
+
 });
 
 var currentData=[];
 
 var toolbarActions = [
   {title: '创建', show: 'always'},
+  {title:'more',show:'never'}
 ];
 
 module.exports = ProjectList;

@@ -122,7 +122,7 @@ var Routers = React.createClass({
     return (
       <Navigator
         initialRoute = {{id: 'ProjectList'}}
-        configureScene={() => Navigator.SceneConfigs.HorizontalSwipeJump}
+        configureScene={() => Navigator.SceneConfigs.FadeAndroid}
         renderScene={this.renderScene}
       />
     );
