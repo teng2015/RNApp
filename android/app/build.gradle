@@ -89,4 +89,6 @@ dependencies {
     compile project(':ReactNativeCalendarAndroid')
     compile project(':react-native-sms-android')
     compile project(':react-native-android-circles')
+    compile project(':react-native-datetime-picker')
+    compile project(':react-native-android-tablayout')
 }

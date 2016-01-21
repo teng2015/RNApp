@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react-native');
+var Dimensions=require('Dimensions');
 var {
   StyleSheet,
 } = React;
@@ -21,6 +22,7 @@ module.exports = StyleSheet.create({
       flex: 1,
       height: 100,
   flexDirection: 'row',
+  width:Dimensions.get('window').width
     },
 headerPager: {
   height: 100,

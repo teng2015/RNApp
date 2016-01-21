@@ -17,11 +17,11 @@ var TimerMixin = require('react-native-timer-mixin');
 var ConsolePanel = require('react-native-console-panel').displayWhenDev();
 var ViewPager = require('react-native-viewpager');
 var imagedata = [
-  {title: '标题1', image:'https://images.unsplash.com/photo-1441742917377-57f78ee0e582?h=1024'},
-  {title: '标题2', image:'https://images.unsplash.com/photo-1441716844725-09cedc13a4e7?h=1024'},
-  {title: '标题3', image:'https://images.unsplash.com/photo-1441448770220-76743f9e6af6?h=1024'},
-  {title: '标题4', image:'https://images.unsplash.com/photo-1441260038675-7329ab4cc264?h=1024'},
-  {title: '标题5', image:'https://images.unsplash.com/photo-1441126270775-739547c8680c?h=1024'},
+  {title: '标题1', image: require('../../images/nba01.jpg')},
+  {title: '标题2', image: require('../../images/nba02.jpg')},
+  {title: '标题3', image: require('../../images/nba03.jpg')},
+  {title: '标题4', image: require('../../images/nba04.jpg')},
+  {title: '标题5', image: require('../../images/nba05.jpg')},
 ];
 
 var ProjectList = React.createClass({
@@ -48,8 +48,9 @@ var ProjectList = React.createClass({
     return (
       <TouchableOpacity style={{flex: 1}}>
         <Image
-          source={{uri: story.image}}
+          source={story.image}
           style={styles.headerItem}>
+
           <View style={styles.headerTitleContainer}>
             <Text style={styles.headerTitle}
               numberOfLines={2}>

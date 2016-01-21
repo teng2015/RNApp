@@ -10,6 +10,15 @@ function getProjectList(){
 		});
 }
 
+function getCitysList(){
+  return fetch('http://pic.ofcard.com/themes/common/region/China_Region_Last.js')
+  .then((response)=>response.json())
+  .then((responseData)=>{
+    console.info("加载citylist完成：",responseData);
+    return responseData;
+  });
+}
+
 function getProjectIssuesList(projectId){
     return fetch(`${SERVER}/${projectId}`)
 		.then((response) => response.json())
@@ -64,7 +73,8 @@ var DataService = {
 	'getProjectIssuesList': getProjectIssuesList,
   'addUser':addUser,
   'deleteUser':deleteUser,
-  'updateUser':updateUser
+  'updateUser':updateUser,
+  'getCitysList':getCitysList
 };
 
 module.exports = DataService

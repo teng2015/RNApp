@@ -22,6 +22,9 @@ var styles = require("./style");
 var ProjectCell = React.createClass({
   render: function() {
     var project = this.props.project;
+    if (project.avatar==null) {
+      project.avatar='https://resource-huobanyun-cn.alikunlun.com/3.1.142/content/images/avatar_default.jpg';
+    }
     return (
       <ScrollView horizontal={true} style={styles.scroll} showsHorizontalScrollIndicator={false} overflow={'visiable'} ref="scroll">
       <TouchableNativeFeedback onPress={this.props.onSelect}  style={{overflow:'hidden'}}>

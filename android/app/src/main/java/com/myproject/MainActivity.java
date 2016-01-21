@@ -23,6 +23,8 @@ import com.aakashns.reactnativedialogs.ReactNativeDialogsPackage;
 import com.chymtt.reactnativecalendar.CalendarPackage;
 import com.rhaker.reactnativesmsandroid.RNSmsAndroidPackage;
 import com.kwaak.reacttwo.CirclesPackage;
+import com.remobile.datetimepicker.*;
+import com.xebia.reactnative.TabLayoutPackage;
 
 public class MainActivity extends FragmentActivity implements DefaultHardwareBackBtnHandler {
 
@@ -43,9 +45,11 @@ public class MainActivity extends FragmentActivity implements DefaultHardwareBac
                 .setBundleAssetName("index.android.bundle")
                 .setJSMainModuleName("index.android")
                 .addPackage(new MainReactPackage())
-                .addPackage(new CirclesPackage())  
+                .addPackage(new CirclesPackage())
                 .addPackage(mRNSmsAndroidPackage)
                 .addPackage(new ReactDatePackage(this))
+                .addPackage(new TabLayoutPackage()) 
+                .addPackage(new RCTDateTimePickerPackage(this))
                 .addPackage(new CalendarPackage())
                 .addPackage(new ReactNativeDialogsPackage(this))
                 .addPackage(new ReactNativeContacts())

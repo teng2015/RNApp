@@ -10,6 +10,7 @@ var Todo = require('./common/todo/Todo.android');
 var CreateUser=require('./user/createuser.android');
 var UpdateUser=require('./user/updateuser.android');
 var ModalTest=require('./user/modaltest');
+var LightboxTest=require('./user/lightboxtest');
 var DialogsTest=require('./user/dialogstest')
 
 var _navigator;
@@ -113,6 +114,13 @@ var Routers = React.createClass({
       return (
         <View style={{flex: 1}}>
           <DialogsTest nav={navigator} />
+        </View>
+      )
+    }
+    if (route.id === 'LightboxTest') {
+      return (
+        <View style={{flex: 1}}>
+          <LightboxTest nav={navigator} />
         </View>
       )
     }
